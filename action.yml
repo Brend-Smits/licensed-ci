@@ -49,7 +49,7 @@ inputs:
   format:
     description: 'Set to `yaml` or `json` to add the `--format` CLI argument to cache and status commands.'
     required: false
-  target-repo:
+  target_repo:
     description: 'Configure a target repository to execute the licensed scan on.'
     required: false 
 
