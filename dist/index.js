@@ -113,8 +113,13 @@ const octokitThrottleOptions = {
 
 async function configureGit() {
   const token = core.getInput('github_token', { required: true });
+  const target_repo = core.getInput('target_repo')
   await core.group('Configuring git', async () => {
-    await exec.exec('git', ['remote', 'add', ORIGIN, `https://x-access-token:${token}@github.com/${process.env.GITHUB_REPOSITORY}`]);
+    if (target_repo) {
+      await exec.exec('git', ['remote', 'add', ORIGIN, `https://x-access-token:${token}@github.com/${target_repo}`]);
+    } else {
+      await exec.exec('git', ['remote', 'add', ORIGIN, `https://x-access-token:${token}@github.com/${process.env.GITHUB_REPOSITORY}`]);
+    }
   });
 }
 
@@ -6289,7 +6294,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var BottleneckLight = _interopDefault(__nccwpck_require__(1174));
 
-const VERSION = "4.3.2";
+const VERSION = "5.0.1";
 
 const noop = () => Promise.resolve();
 // @ts-expect-error
@@ -6431,7 +6436,7 @@ function throttling(octokit, octokitOptions) {
   if (typeof (isUsingDeprecatedOnAbuseLimitHandler ? state.onAbuseLimit : state.onSecondaryRateLimit) !== "function" || typeof state.onRateLimit !== "function") {
     throw new Error(`octokit/plugin-throttling error:
         You must pass the onSecondaryRateLimit and onRateLimit error handlers.
-        See https://github.com/octokit/rest.js#throttling
+        See https://octokit.github.io/rest.js/#throttling
 
         const octokit = new Octokit({
           throttle: {

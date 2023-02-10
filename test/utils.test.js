@@ -31,10 +31,17 @@ describe('configureGit', () => {
 
   it('configures the local git repository', async () => {
     sinon.stub(exec, 'exec').resolves();
-
     await utils.configureGit();
     expect(exec.exec.callCount).toEqual(1);
     expect(exec.exec.getCall(0).args).toEqual(['git', ['remote', 'add', utils.getOrigin(), `https://x-access-token:${process.env.INPUT_GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY}`]]);
+  });
+  
+  it('configures the local git repository with target repository set', async () => {
+    sinon.stub(exec, 'exec').resolves();
+      process.env.INPUT_TARGET_REPO= 'some/repo';
+      await utils.configureGit();
+      expect(exec.exec.callCount).toEqual(1);
+      expect(exec.exec.getCall(0).args).toEqual(['git', ['remote', 'add', utils.getOrigin(), `https://x-access-token:${process.env.INPUT_GITHUB_TOKEN}@github.com/${process.env.INPUT_TARGET_REPO}`]]); 
   });
 });
 
